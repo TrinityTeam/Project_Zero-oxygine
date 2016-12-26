@@ -13,5 +13,3 @@ private:
 	static bool loop();
 
 };
-
-#include "Application.cpp"
