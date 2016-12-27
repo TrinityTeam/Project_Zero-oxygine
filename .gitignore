@@ -6,7 +6,7 @@ cmake_install.cmake
 install_manifest.txt
 CTestTestfile.cmake
 
-build/*
+proj.cmake/build/*
 data-ram/*
 log.txt
 

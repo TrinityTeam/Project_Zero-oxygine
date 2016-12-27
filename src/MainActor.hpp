@@ -27,7 +27,7 @@ private:
     void buttonClicked(Event* event);
     void runSprite();
 
-	Resources* resources;
+	Resources* resources {};
     spTextField text {};
     spSprite button {};
 };

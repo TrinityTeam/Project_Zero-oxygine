@@ -13,24 +13,6 @@ using oxygine::Stage;
 
 
 
-bool Application::loop() {
-    bool terminationRequested = core::update();
-
-    getStage()->update();
-
-    if (core::beginRendering()) {
-        Color clearColor(32, 32, 32, 255);
-        Rect viewport(Point(0, 0), core::getDisplaySize());
-        getStage()->render(clearColor, viewport);
-
-        core::swapDisplayBuffers();
-    }
-
-    return terminationRequested;
-}
-
-
-
 void Application::run() {
     ObjectBase::__startTracingLeaks();
 
@@ -62,4 +44,22 @@ void Application::run() {
     core::release();
     ObjectBase::dumpCreatedObjects();
     ObjectBase::__stopTracingLeaks();
+}
+
+
+
+bool Application::loop() {
+    bool terminationRequested = core::update();
+
+    getStage()->update();
+
+    if (core::beginRendering()) {
+        Color clearColor(32, 32, 32, 255);
+        Rect viewport(Point(0, 0), core::getDisplaySize());
+        getStage()->render(clearColor, viewport);
+
+        core::swapDisplayBuffers();
+    }
+
+    return terminationRequested;
 }

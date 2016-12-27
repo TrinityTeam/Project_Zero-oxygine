@@ -5,7 +5,6 @@ class Application {
 public:
 	static void run();
 
-
 	Application() = delete;
 	Application(const Application&) = delete;
 
