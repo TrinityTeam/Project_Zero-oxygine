@@ -5,12 +5,14 @@
 MainActor::MainActor(Resources* resources):
 	resources {resources} {
     character = new Sprite();
+    character->setAnchor({0.5, 0.5});
     addChild(character);
     ResAnim* animation = resources->getResAnim("anim");
     int duration = 600;//ms
     int loops = -1;//infinity loops
     character->addTween(Sprite::TweenAnim(animation), duration, loops);
-    character->setPosition(getStage()->getSize() / 2 - character->getSize() / 2);
+    character->setPosition(getStage()->getSize() / 2);
+
     
     EventCallback callback = CLOSURE(this, &MainActor::buttonClicked);
     getStage()->addEventListener(TouchEvent::CLICK, callback);
@@ -43,5 +45,10 @@ void MainActor::buttonClicked(Event* e) {
 
 
 void MainActor::runSprite(Vector2 destination) {
-    character->addTween(Sprite::TweenPosition(destination - character->getSize()/2), 2500, 1);
+    if(destination.x > character->getPosition().x) {
+        character->setScale({1., 1.});
+    } else if (destination.x < character->getPosition().x) {
+        character->setScale({-1., 1.});
+    }
+    character->addTween(Sprite::TweenPosition(destination), 2500, 1);
 }
