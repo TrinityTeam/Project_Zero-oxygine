@@ -36,7 +36,7 @@ void MainActor::buttonClicked(Event* e) {
     character->addTween(Sprite::TweenColor(Color::Green), 500, 1, true);
     text->setScale(1.0f);
     text->addTween(Actor::TweenScale(1.1f), 500, 1, true);
-    text->setText("Clicked!");
+    text->setText("Still alive");
     runSprite(event->localPosition);
 }
 
