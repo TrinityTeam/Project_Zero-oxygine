@@ -25,11 +25,11 @@ public:
 
 private:
     void buttonClicked(Event* event);
-    void runSprite();
+    void runSprite(Vector2 destination);
 
 	Resources* resources {};
     spTextField text {};
-    spSprite button {};
+    spSprite character {};
 };
 
 
