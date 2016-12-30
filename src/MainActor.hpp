@@ -1,12 +1,9 @@
 #pragma once
 #include "oxygine-framework.h"
+#include "Creature.hpp"
 using oxygine::Actor;
 using oxygine::Vector2;
 using oxygine::Event;
-using oxygine::TextField;
-using oxygine::TweenQueue;
-using oxygine::spSprite;
-using oxygine::spTextField;
 using oxygine::Resources;
 
 
@@ -20,8 +17,7 @@ private:
     void runSprite(Vector2 destination);
 
 	Resources* resources {};
-    spTextField text {};
-    spSprite character {};
+	spCreature character {};
 };
 
 
