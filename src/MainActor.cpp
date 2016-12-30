@@ -1,4 +1,11 @@
 #include "MainActor.hpp"
+using oxygine::Sprite;
+using oxygine::getStage;
+using oxygine::TouchEvent;
+using oxygine::EventCallback;
+using oxygine::TextStyle;
+using oxygine::Color;
+using oxygine::ResAnim;
 
 
 
@@ -36,8 +43,10 @@ void MainActor::buttonClicked(Event* e) {
 
     character->setColor(Color::White);
     character->addTween(Sprite::TweenColor(Color::Green), 500, 1, true);
-    text->setScale(1.0f);
-    text->addTween(Actor::TweenScale(1.1f), 500, 1, true);
+    int direction = (event->localPosition.x > character->getPosition().x) ? 1 : -1; 
+    character->setScaleX(direction);
+    text->setScaleX(direction);
+    text->addTween(Actor::TweenScale(Vector2 {direction*1.1f, 1.1f}), 500, 1, true);
     text->setText("Still alive");
     runSprite(event->localPosition);
 }
@@ -45,10 +54,5 @@ void MainActor::buttonClicked(Event* e) {
 
 
 void MainActor::runSprite(Vector2 destination) {
-    if(destination.x > character->getPosition().x) {
-        character->setScale({1., 1.});
-    } else if (destination.x < character->getPosition().x) {
-        character->setScale({-1., 1.});
-    }
     character->addTween(Sprite::TweenPosition(destination), 2500, 1);
 }
