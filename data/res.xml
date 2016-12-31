@@ -3,7 +3,8 @@
 	<set path = "images" />
 	<atlas>
 		<image file="anim.png" cols = "8" />
-		<image file="button.png"/>		
+		<image file="button.png"/>
+		<image file="General Zirix Starstrider.png" cols = "14" rows = "6" />
 	</atlas>
 	
 	<set path = "fonts" />
