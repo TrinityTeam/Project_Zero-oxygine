@@ -37,7 +37,9 @@ void Creature::moveTo(Vector2 destination) {
 
     auto tweenPosition = Sprite::TweenPosition(destination);
     setAnimation(Animation::Run);
-	addTween(tweenPosition, 2500, 1)->setDoneCallback(
+	removeTween(positionTween);
+	positionTween = addTween(tweenPosition, 2500, 1);
+	positionTween->setDoneCallback(
 		[this](Event*) { setAnimation(Animation::Idle); });
 }
 
