@@ -37,7 +37,7 @@ void Creature::moveTo(Vector2 destination) {
 
     auto tweenPosition = Sprite::TweenPosition(destination);
     setAnimation(Animation::Run);
-	removeTween(positionTween);
+	removeTween(positionTween); // TODO: Replace removing old tween with redirecting destination
 	positionTween = addTween(tweenPosition, 2500, 1);
 	positionTween->setDoneCallback(
 		[this](Event*) { setAnimation(Animation::Idle); });
