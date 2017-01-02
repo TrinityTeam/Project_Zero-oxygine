@@ -45,6 +45,12 @@ void Creature::moveTo(Vector2 destination) {
 
 
 
+void Creature::attack() {
+	setAnimation(Animation::Strike);
+}
+
+
+
 void Creature::setAnimation(Animation animation_id) {
 	removeTween(animationTween);
 
@@ -61,10 +67,11 @@ void Creature::setAnimation(Animation animation_id) {
 	    	animationTween = sprite->addTween(tween, 600, -1);
 			break;
 		}
-	case Animation::Attack:{
+	case Animation::Strike:{
 	    	auto tween = Sprite::TweenAnim(animation, 3);
 	    	tween.setInterval(0, 10);
 	    	animationTween = sprite->addTween(tween, 600, 1);
+	    	animationTween->setDoneCallback([this](Event*) { setAnimation(Animation::Idle); });
 			break;
 		}
 	case Animation::Death:{

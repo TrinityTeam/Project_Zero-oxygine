@@ -2,10 +2,10 @@
 project (Project_Zero)
 
 if (NOT OXYGINE_ROOT AND DEFINED ENV{OXYGINE_ROOT})
-file(TO_CMAKE_PATH "$ENV{OXYGINE_ROOT}" OXYGINE_ROOT)
+	file(TO_CMAKE_PATH "$ENV{OXYGINE_ROOT}" OXYGINE_ROOT)
 
 elseif(NOT OXYGINE_ROOT AND NOT DEFINED ENV{OXYGINE_ROOT})
-message(FATAL_ERROR "Oxygine has not been found; Please specify OXYGINE_ROOT environment variable")
+	message(FATAL_ERROR "Oxygine has not been found; Please specify OXYGINE_ROOT environment variable")
 
 endif()
 
@@ -20,12 +20,12 @@ set(SOURCES_LIST ../src/main ../src/MainActor ../src/Application ../src/Creature
 
 add_executable(Project_Zero ${SOURCES_LIST})
 
-if (WIN32) #disable console mode for VC++
-set_target_properties(Project_Zero PROPERTIES WIN32_EXECUTABLE TRUE)
-endif(WIN32)
-
 if(MINGW)
-set(ADDITIONAL_LIBRARIES psapi)
+	set(ADDITIONAL_LIBRARIES psapi)
 endif()
 
 target_link_libraries(${PROJECT_NAME} ${OXYGINE_CORE_LIBS} ${ADDITIONAL_LIBRARIES})
+
+if (WIN32)
+	set_target_properties(Project_Zero PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()

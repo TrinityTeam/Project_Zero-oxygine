@@ -15,9 +15,10 @@ public:
 	Creature(Resources* resources);
 
 	void moveTo(Vector2 position);
+	void attack();
 
 private:
-	enum class Animation {Idle, Death, Run, Attack};
+	enum class Animation {Idle, Death, Run, Strike};
 	void setAnimation(Animation animation);
 
 	Resources* resources {};

@@ -14,6 +14,7 @@ public:
 
 private:
     void buttonClicked(Event* event);
+    void keyReleased(Event* event);
     void runSprite(Vector2 destination);
 
 	Resources* resources {};
