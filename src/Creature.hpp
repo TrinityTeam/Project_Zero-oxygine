@@ -23,6 +23,7 @@ private:
 
 	Resources* resources {};
 	ResAnim* animation {};
+	Animation currentState {};
 	spTween animationTween {};
 	spTween positionTween {};
     spTextField nameBar {};

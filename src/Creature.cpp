@@ -3,6 +3,7 @@ using oxygine::TextStyle;
 using oxygine::Color;
 using oxygine::TextField;
 using oxygine::Event;
+using oxygine::TweenT;
 
 
 
@@ -26,21 +27,19 @@ Creature::Creature(Resources* resources):
     nameBar->setStyle(style);
     nameBar->setText("Anonymous");
 	nameBar->setY(-sprite->getSize().y/2-nameBar->getSize().y);
-
 }
 
 
 
 void Creature::moveTo(Vector2 destination) {
 	int direction = (destination.x > getPosition().x) ? 1 : -1; 
-    sprite->setScaleX(direction);
+	sprite->setScaleX(direction);
 
-    auto tweenPosition = Sprite::TweenPosition(destination);
-    setAnimation(Animation::Run);
-	removeTween(positionTween); // TODO: Replace removing old tween with redirecting destination
-	positionTween = addTween(tweenPosition, 2500, 1);
+	removeTween(positionTween);
+	positionTween = addTween(Sprite::TweenPosition(destination), 2500, 1);
 	positionTween->setDoneCallback(
 		[this](Event*) { setAnimation(Animation::Idle); });
+	setAnimation(Animation::Run);
 }
 
 
@@ -56,29 +55,43 @@ void Creature::setAnimation(Animation animation_id) {
 
 	switch(animation_id) {
 	case Animation::Idle:{
-    	auto tween = Sprite::TweenAnim(animation, 0);
-    	tween.setInterval(0, 11);
-    	animationTween = sprite->addTween(tween, 600, -1);
+		auto tween = Sprite::TweenAnim(animation, 0);
+		tween.setInterval(0, 11);
+		animationTween = sprite->addTween(tween, 600, -1);
+		currentState = animation_id;
 		break;
 	}
 	case Animation::Run:{
-	    	auto tween = Sprite::TweenAnim(animation, 2);
-	    	tween.setInterval(0, 7);
-	    	animationTween = sprite->addTween(tween, 600, -1);
-			break;
+		auto tween = Sprite::TweenAnim(animation, 2);
+		tween.setInterval(0, 7);
+		animationTween = sprite->addTween(tween, 600, -1);
+		currentState = animation_id;
+		break;
 		}
 	case Animation::Strike:{
-	    	auto tween = Sprite::TweenAnim(animation, 3);
-	    	tween.setInterval(0, 10);
-	    	animationTween = sprite->addTween(tween, 600, 1);
-	    	animationTween->setDoneCallback([this](Event*) { setAnimation(Animation::Idle); });
+		if(currentState == Animation::Strike and 
+		   animationTween->isStarted() and not animationTween->isDone()) {
 			break;
 		}
+		auto tween = Sprite::TweenAnim(animation, 3);
+		tween.setInterval(0, 10);
+		animationTween = sprite->addTween(tween, 600, 1);
+		currentState = animation_id;
+		animationTween->setDoneCallback([this](Event*) {
+			if(positionTween->isDone()) {
+				setAnimation(Animation::Idle);
+			} else {
+				setAnimation(Animation::Run);
+			}
+		});
+		break;
+		}
 	case Animation::Death:{
-	    	auto tween = Sprite::TweenAnim(animation, 5);
-	    	tween.setInterval(0, 13);
-	    	animationTween = sprite->addTween(tween, 600, 1);
-			break;
+		auto tween = Sprite::TweenAnim(animation, 5);
+		tween.setInterval(0, 13);
+		animationTween = sprite->addTween(tween, 600, 1);
+		currentState = animation_id;
+		break;
 		}
 	}
 }
