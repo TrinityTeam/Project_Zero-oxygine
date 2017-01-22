@@ -18,12 +18,17 @@ public:
 	void attack();
 
 private:
-	enum class Animation {Idle, Death, Run, Strike};
-	void setAnimation(Animation animation);
+	enum class State {None, Idle, Decay, Run, Attack};
 
-	Resources* resources {};
+	friend std::ostream& operator<<(std::ostream& out, Creature::State state);
+
+	void setState(State state);
+	void updateState();
+	void updateAnimation();
+
+
 	ResAnim* animation {};
-	Animation currentState {};
+	State currentState {};
 	spTween animationTween {};
 	spTween positionTween {};
     spTextField nameBar {};

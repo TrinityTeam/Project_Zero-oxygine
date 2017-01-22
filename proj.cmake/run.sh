@@ -1,9 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 until [ -z $1 ]
 do
-    printf '%s' ""
-
 	case "$1" in
 	    '-c'|'--cmake-options')
     		CMAKE_OPTIONS="$2"
@@ -25,7 +23,11 @@ do
     		DATA_DIR=$(readlink -f "$2")
             shift
     	;;
-    	*)
+        '-h'|'--help')
+            printf 'Options:\n-c --cmake-options\tSet CMake build options\n-m --make-options\tSet Make build options\n-r --oxygine-root\tSet Oxygine root directory\n-b --build-dir\tSet build directory\n-d --data-dir\t Set data dir\n'
+            exit 0
+        ;;
+        *)
     	    printf '%s\n' "Unknown option: $1"
     	;;
 	esac

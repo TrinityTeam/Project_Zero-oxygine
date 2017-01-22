@@ -8,9 +8,9 @@ using oxygine::Resources;
 
 
 
-class MainActor: public Actor {
+class Scene: public Actor {
 public:
-    MainActor(Resources* resources);
+    Scene(Resources* resources);
 
 private:
     void buttonClicked(Event* event);
@@ -23,4 +23,4 @@ private:
 
 
 
-using spMainActor = oxygine::intrusive_ptr<MainActor>;
+using spScene = oxygine::intrusive_ptr<Scene>;

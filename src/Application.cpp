@@ -1,7 +1,7 @@
 #include "Application.hpp"
 #include "core/oxygine.h"
 #include "Stage.h"
-#include "MainActor.hpp"
+#include "Scene.hpp"
 namespace core = oxygine::core;
 using oxygine::getStage;
 using oxygine::Rect;
@@ -29,7 +29,7 @@ void Application::run() {
     Resources gameResources;
     gameResources.loadXML("res.xml");
 
-    spMainActor actor = new MainActor(&gameResources);
+    spScene actor = new Scene(&gameResources);
     getStage()->addChild(actor);
 
     while (true) {

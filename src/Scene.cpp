@@ -1,4 +1,4 @@
-#include "MainActor.hpp"
+#include "Scene.hpp"
 #include <Input.h>
 #include <SDL.h>
 #include <SDL_keyboard.h>
@@ -10,28 +10,28 @@ using oxygine::Input;
 
 
 
-MainActor::MainActor(Resources* resources):
+Scene::Scene(Resources* resources):
 	resources {resources} {
     character = new Creature(resources);
     addChild(character);
     character->setPosition(getStage()->getSize() / 2);
 
-    EventCallback touchCallback = CLOSURE(this, &MainActor::buttonClicked);
+    EventCallback touchCallback = CLOSURE(this, &Scene::buttonClicked);
     getStage()->addEventListener(TouchEvent::CLICK, touchCallback);
-    EventCallback keyboardCallback = CLOSURE(this, &MainActor::keyReleased);
+    EventCallback keyboardCallback = CLOSURE(this, &Scene::keyReleased);
     getStage()->addEventListener(KeyEvent::KEY_UP, keyboardCallback);
 }
 
 
 
-void MainActor::buttonClicked(Event* e) {
+void Scene::buttonClicked(Event* e) {
     TouchEvent* event = static_cast<TouchEvent*>(e);
     character->moveTo(event->localPosition);
 }
 
 
 
-void MainActor::keyReleased(Event* e) {
+void Scene::keyReleased(Event* e) {
     auto event = static_cast<KeyEvent*>(e);
 
     switch (event->data->keysym.sym) {
