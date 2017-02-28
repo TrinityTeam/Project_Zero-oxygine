@@ -1,4 +1,5 @@
 #pragma once
+#include <set>
 #include "oxygine-framework.h"
 #include "Creature.hpp"
 using oxygine::Actor;
@@ -12,6 +13,10 @@ class Scene: public Actor {
 public:
     Scene(Resources* resources);
 
+    void addCreature(spCreature creature);
+    Creature* getCharacter();
+    void setCharacter(spCreature character);
+
 private:
     void buttonClicked(Event* event);
     void keyReleased(Event* event);
@@ -19,6 +24,7 @@ private:
 
 	Resources* resources {};
 	spCreature character {};
+    std::set<spCreature> creatures {};
 };
 
 

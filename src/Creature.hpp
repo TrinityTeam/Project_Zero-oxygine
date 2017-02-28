@@ -1,5 +1,6 @@
 #pragma once
 #include "oxygine-framework.h"
+#include <map>
 using oxygine::Sprite;
 using oxygine::spSprite;
 using oxygine::spTextField;
@@ -12,22 +13,32 @@ using oxygine::Vector2;
 
 class Creature: public Sprite {
 public:
+	enum class State {None, Idle, Decay, Run, Attack};
+
+	struct AnimationData { std::string file; uint32_t row, framesNum; int32_t duration; };
+	
+public:
 	Creature(Resources* resources);
+	virtual ~Creature() { oxygine::log::warning("Destoyed");}
 
 	void moveTo(Vector2 position);
 	void attack();
 
-private:
-	enum class State {None, Idle, Decay, Run, Attack};
+	void setName(const std::string& name);
 
+	void setAnimation(State state, AnimationData animation);
+
+
+private:
 	friend std::ostream& operator<<(std::ostream& out, Creature::State state);
 
+	void initNameLabel(const std::string& name);
 	void setState(State state);
 	void updateState();
 	void updateAnimation();
 
-
-	ResAnim* animation {};
+	std::map<State, AnimationData> animationData;
+	Resources* resources {};
 	State currentState {};
 	spTween animationTween {};
 	spTween positionTween {};

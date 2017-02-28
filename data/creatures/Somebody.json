@@ -1,0 +1,12 @@
+{
+    "appearence":{
+        "file":"General Zirix Starstrider",
+        "animations": {
+            "Attack": {"row": 3, "frames_num": 10, "duration": 600},
+            "Idle": {"row": 0, "frames_num": 11, "duration": 600},
+            "Run": {"row": 2, "frames_num": 7, "duration": 600},
+            "Decay": {"row": 5, "frames_num": 13, "duration": 600}
+        }
+    },
+    "speed": 100
+}

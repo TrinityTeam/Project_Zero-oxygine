@@ -1,7 +1,9 @@
 #include "Application.hpp"
+// TODO #include "ResFontFT.h"
 #include "core/oxygine.h"
 #include "Stage.h"
 #include "Scene.hpp"
+#include "parser/SceneReader.hpp"
 namespace core = oxygine::core;
 using oxygine::getStage;
 using oxygine::Rect;
@@ -29,7 +31,8 @@ void Application::run() {
     Resources gameResources;
     gameResources.loadXML("res.xml");
 
-    spScene actor = new Scene(&gameResources);
+    spScene actor = SceneReader::readFrom("scenes/base_scene.json", &gameResources);
+    actor->setPosition(size/2);
     getStage()->addChild(actor);
 
     while (true) {

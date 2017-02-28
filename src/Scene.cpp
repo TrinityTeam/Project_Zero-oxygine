@@ -24,9 +24,30 @@ Scene::Scene(Resources* resources):
 
 
 
+void Scene::setCharacter(spCreature character) {
+    removeChild(this->character);
+    this->character = character;
+    addChild(this->character);
+}
+
+
+
+void Scene::addCreature(spCreature creature) {
+    creatures.insert(creature);
+    addChild(creature);
+}
+
+
+
+Creature* Scene::getCharacter() {
+    return character.get();
+}
+
+
+
 void Scene::buttonClicked(Event* e) {
     TouchEvent* event = static_cast<TouchEvent*>(e);
-    character->moveTo(event->localPosition);
+    character->moveTo(event->localPosition - getPosition());
 }
 
 

@@ -30,12 +30,12 @@ std::ostream& operator<<(std::ostream& out, Creature::State state) {
 }
 
 
+
 Creature::Creature(Resources* resources):
 	currentState {State::None},
-	animation {resources->getResAnim("General Zirix Starstrider")},
+	resources {resources},
 	positionTween {new Tween},
-	sprite {new Sprite},
-	nameBar {new TextField} {
+	sprite {new Sprite} {
 
 	setAnchor({0.5, 0.5});
 	sprite->setAnchor({0.5, 0.5});
@@ -43,15 +43,7 @@ Creature::Creature(Resources* resources):
     
 	updateState();
 
-    nameBar->attachTo(this);
-    TextStyle style;
-    style.font = resources->getResFont("main");
-    style.color = Color::White;
-    style.vAlign = TextStyle::VALIGN_MIDDLE;
-    style.hAlign = TextStyle::HALIGN_CENTER;
-    nameBar->setStyle(style);
-    nameBar->setText("Anonymous");
-	nameBar->setY(-sprite->getSize().y/2-nameBar->getSize().y);
+	initNameLabel("_anonymous");
 }
 
 
@@ -70,7 +62,7 @@ void Creature::moveTo(Vector2 destination) {
 	}
 
 	positionTween = createTween(Sprite::TweenPosition(destination), (distance/SPEED)*1000., 1);
-	// Queue is needed because when a tween calls its done callback, its status is not 'done' 
+	// Queue is needed, because when tween calls its done callback, the tween's status is not 'done' 
 	auto tween = addTween(TweenQueue::create(positionTween));
 	tween->setName("tween position");
 	tween->setDoneCallback([this](Event*) {
@@ -87,9 +79,39 @@ void Creature::attack() {
 
 
 
+void Creature::setName(const std::string& name) {
+    nameBar->setText(name);
+}
+
+
+
+void Creature::setAnimation(State state, AnimationData animation) {
+	animationData[state] = animation;
+	updateAnimation();
+}
+
+
+
+void Creature::initNameLabel(const std::string& name) {
+	if(nameBar) {
+		nameBar->detach();
+	}
+	nameBar = new TextField;
+    nameBar->attachTo(this);
+    TextStyle style;
+    style.font = resources->getResFont("main");
+    style.color = Color::White;
+    style.vAlign = TextStyle::VALIGN_MIDDLE;
+    style.hAlign = TextStyle::HALIGN_CENTER;
+    nameBar->setStyle(style);
+    nameBar->setText(name);
+	nameBar->setY(-sprite->getSize().y/2-nameBar->getSize().y);
+}
+
+
+
 void Creature::setState(State state) {
 	if(currentState != state) {
-		std::cout << currentState << " -> " << state << '\n';
 		currentState = state;
 		updateAnimation();
 	}
@@ -98,7 +120,6 @@ void Creature::setState(State state) {
 
 
 void Creature::updateState() {
-	std::cout << currentState << " -> ";
 	auto state = currentState;
 	if((currentState == State::Attack and animationTween->isDone()) or
 	   (currentState == State::Run and positionTween->isDone())) {
@@ -112,7 +133,7 @@ void Creature::updateState() {
 			currentState = State::Idle;
 		}
 	}
-	std::cout << currentState << '\n';
+
 	if(currentState != state) {
 		updateAnimation();
 	}
@@ -121,38 +142,43 @@ void Creature::updateState() {
 
 
 void Creature::updateAnimation() {
+	AnimationData currentAnimationData;
+	try {
+		currentAnimationData = animationData.at(currentState);
+	
+	} catch (std::out_of_range) {
+		std::cerr << "Animation for state " << currentState << " has not been specified\n";
+		return;
+	}
+	auto animation = resources->getResAnim(currentAnimationData.file);
+
 	if(animationTween) {
 		animationTween->complete();
 		animationTween->remove();
 	}
 
+	auto tween = Sprite::TweenAnim(animation, currentAnimationData.row);
+	tween.setInterval(0, currentAnimationData.framesNum);
+
 	switch(currentState) {
-	case State::Idle:{
-		auto tween = Sprite::TweenAnim(animation, 0);
-		tween.setInterval(0, 11);
-		animationTween = sprite->addTween(tween, 600, -1);
+	case State::Idle: {
+		animationTween = sprite->addTween(tween, currentAnimationData.duration, -1);
 		break;
 	}
-	case State::Run:{
-		auto tween = Sprite::TweenAnim(animation, 2);
-		tween.setInterval(0, 7);
-		animationTween = sprite->addTween(tween, 600, -1);
+	case State::Run: {
+		animationTween = sprite->addTween(tween, currentAnimationData.duration, -1);
 		break;
 	}
-	case State::Attack:{
-		auto tween = Sprite::TweenAnim(animation, 3);
-		tween.setInterval(0, 10);
-		animationTween = createTween(tween, 600, 1);
+	case State::Attack: {
+		animationTween = createTween(tween, currentAnimationData.duration, 1);
 		sprite->addTween(TweenQueue::create(animationTween))->
 			setDoneCallback([this](Event*) {
 				updateState();
 			});
 		break;
 	}
-	case State::Decay:{
-		auto tween = Sprite::TweenAnim(animation, 5);
-		tween.setInterval(0, 13);
-		animationTween = sprite->addTween(tween, 600, 1);
+	case State::Decay: {
+		animationTween = sprite->addTween(tween, currentAnimationData.duration, 1);
 		break;
 	}
 	}

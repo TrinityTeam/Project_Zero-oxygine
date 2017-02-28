@@ -16,7 +16,8 @@ link_directories(${OXYGINE_LIBRARY_DIRS})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OXYGINE_CXX_FLAGS}")
 
-set(SOURCES_LIST ../src/main ../src/Scene ../src/Application ../src/Creature)
+set(SOURCES_LIST ../src/main ../src/Scene ../src/Application ../src/Creature 
+                 ../src/parser/SceneReader ../src/parser/CreatureReader)
 
 add_executable(Project_Zero ${SOURCES_LIST})
 

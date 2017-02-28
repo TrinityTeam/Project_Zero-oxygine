@@ -8,5 +8,6 @@
 	</atlas>
 	
 	<set path = "fonts" />
-	<font file="main.fnt" />	
+		<font file="main.fnt" />
+
 </resources>
